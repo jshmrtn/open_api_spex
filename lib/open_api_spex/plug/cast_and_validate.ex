@@ -79,7 +79,13 @@ defmodule OpenApiSpex.Plug.CastAndValidate do
 
     cast_opts = opts |> Map.take([:replace_params]) |> Map.to_list()
 
-    case OpenApiSpex.cast_and_validate(spec, operation, conn, nil, cast_opts) do
+    case OpenApiSpex.cast_and_validate(
+           spec,
+           operation,
+           conn,
+           nil,
+           cast_opts ++ [read_write_scope: :write]
+         ) do
       {:ok, conn} ->
         conn
 

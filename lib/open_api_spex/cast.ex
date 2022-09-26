@@ -100,10 +100,21 @@ defmodule OpenApiSpex.Cast do
 
   """
 
-  @spec cast(schema_or_reference | nil, term(), map(), [cast_opt()]) ::
+  @spec cast(schema_or_reference | nil, term(), map(), [
+          cast_opt() | {:read_write_scope, read_write_scope()}
+        ]) ::
           {:ok, term()} | {:error, [Error.t()]}
   def cast(schema, value, schemas \\ %{}, opts \\ []) do
-    ctx = %__MODULE__{schema: schema, value: value, schemas: schemas, opts: opts}
+    {read_write_scope, opts} = Keyword.pop(opts, :read_write_scope, nil)
+
+    ctx = %__MODULE__{
+      schema: schema,
+      value: value,
+      schemas: schemas,
+      opts: opts,
+      read_write_scope: read_write_scope
+    }
+
     cast(ctx)
   end
 
